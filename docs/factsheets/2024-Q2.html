@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factsheet 2024-Q2 · cotas de embalses del Ecuador</title>
+<style>
+  body { font-family: Georgia, serif; color:#1a2332; margin:2rem auto; max-width:52rem; line-height:1.55; padding:0 1rem; }
+  h1 { font-size:1.4rem; }
+  h2 { font-size:1.05rem; border-bottom:1px solid #ccd4e0; padding-bottom:.3rem; margin-top:1.6rem; }
+  table { border-collapse:collapse; width:100%; font-size:.82rem; }
+  th, td { border:1px solid #d7dde7; padding:.3rem .5rem; text-align:center; }
+  thead th { background:#eef2f8; }
+  .nota { color:#5a6b82; font-size:.85rem; }
+  .principio { border-left:4px solid #1565c0; padding:.5rem 1rem; background:#f4f7fb; }
+  @media print { body { margin:0; } .no-imprimir { display:none; } }
+</style></head>
+<body>
+<h1>Factsheet trimestral · 2024-Q2</h1>
+<p class="nota">Cotas diarias (msnm, medianoche hora Ecuador) medidas por el SCADA de CELEC SUR y
+recolectadas por <a href="../index.html">cotas-embalses-ecuador</a>. Hechos verificables; sin conclusiones editoriales.</p>
+<p class="principio">Principio del proyecto: los datos se presentan; las conclusiones son del lector.</p>
+
+<h2>Resumen por embalse</h2>
+<table>
+<thead><tr><th>Embalse</th><th>Cota inicio</th><th>Cota fin</th><th>Δ trimestre</th>
+<th>Mínimo</th><th>Máximo</th><th>Días &lt; mínima</th><th>Días &lt; crítica</th><th>Días &gt; máxima</th></tr></thead>
+<tbody><tr>
+  <th>Mazar</th>
+  <td>2116.73</td>
+  <td>2150.97</td>
+  <td>+34.24</td>
+  <td>2106.66 <small>(17-Apr)</small></td>
+  <td>2153.17 <small>(21-Jun)</small></td>
+  <td>0</td><td>16</td>
+  <td>1</td>
+</tr><tr>
+  <th>Molino (Amaluza)</th>
+  <td>1981.44</td>
+  <td>1985.38</td>
+  <td>+3.94</td>
+  <td>1971.65 <small>(15-Apr)</small></td>
+  <td>1990.71 <small>(17-Jun)</small></td>
+  <td>6</td><td>—</td>
+  <td>0</td>
+</tr><tr>
+  <th>Sopladora</th>
+  <td>1315.12</td>
+  <td>1316.39</td>
+  <td>+1.27</td>
+  <td>1313.41 <small>(19-Apr)</small></td>
+  <td>1317.35 <small>(16-Jun)</small></td>
+  <td>0</td><td>—</td>
+  <td>0</td>
+</tr></tbody>
+</table>
+
+<h2>Umbrales de referencia (msnm)</h2>
+<table>
+<thead><tr><th>Embalse</th><th>Mínima</th><th>Crítica</th><th>Máxima</th></tr></thead>
+<tbody>
+<tr><th>Mazar</th><td>2098</td><td>2115.0</td><td>2153</td></tr><tr><th>Amaluza</th><td>1975</td><td>—</td><td>1991</td></tr><tr><th>Sopladora</th><td>1312</td><td>—</td><td>1318</td></tr>
+</tbody>
+</table>
+
+<h2>Verificación</h2>
+<p class="nota">Serie completa: <a href="../datos/cotas_historico.csv">cotas_historico.csv</a> ·
+Fuente primaria: <a href="https://generacioncsr.celec.gob.ec/graficasproduccion/" target="_blank" rel="noopener">tablero oficial CELEC SUR</a> ·
+Zona horaria: America/Guayaquil.</p>
+<p class="no-imprimir nota"><a href="../index.html">← volver al sitio</a></p>
+</body></html>

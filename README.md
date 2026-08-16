@@ -42,7 +42,11 @@ CSV versionado en git y respaldándolo (mejor esfuerzo) en web.archive.org.
 │   └── comunicados/
 │       ├── comunicados.csv          # registro manual de declaraciones oficiales
 │       └── LEEME.md                 # reglas de registro (neutras)
-├── docs/                            # sitio estático de GitHub Pages (generado)
+├── docs/
+│   ├── index.html                   # sitio de GitHub Pages (generado)
+│   ├── estado.json                  # API pública de estado factual (generada)
+│   ├── factsheets/YYYY-QN.html      # factsheets trimestrales imprimibles
+│   ├── figuras/ y datos/            # copias publicables de figuras y CSV
 ├── notebooks/                       # 5 fases CRISP-DM
 │   ├── 01_comprension_negocio.ipynb
 │   ├── 02_comprension_datos.ipynb
@@ -51,9 +55,12 @@ CSV versionado en git y respaldándolo (mejor esfuerzo) en web.archive.org.
 │   └── 05_evaluacion_conclusiones.ipynb
 ├── src/
 │   ├── constantes.py                # umbrales oficiales, MRIDs, endpoints
-│   ├── scraper.py                   # recolección (diaria / backfill)
+│   ├── scraper.py                   # recolección de cotas (diaria / backfill)
 │   ├── visualizacion.py             # figuras semáforo y cruces
-│   └── generar_sitio.py             # genera docs/index.html para Pages
+│   ├── alertas.py                   # estado factual → docs/estado.json
+│   ├── generacion.py                # contexto de generación (CENACE)
+│   ├── factsheet.py                 # factsheets trimestrales
+│   └── generar_sitio.py             # genera docs/ (sitio + estado + datos)
 ├── reports/figures/                 # PNG listos para publicar
 ├── .github/
 │   ├── workflows/recoleccion_diaria.yml
@@ -61,6 +68,34 @@ CSV versionado en git y respaldándolo (mejor esfuerzo) en web.archive.org.
 ├── SECURITY.md                      # política de seguridad y reporte
 └── requirements.txt
 ```
+
+## Usos y decisiones que apoya
+
+Diseñado para que el dato sirva fuera del repositorio:
+
+| Audiencia | Uso |
+|---|---|
+| Ciudadanía y prensa | Verificar declaraciones oficiales contra la cota medida del día; citar episodios con enlace y fecha |
+| Empresas (alto consumo, comercializadoras) | Anticipar riesgo de racionamiento (la serie mostró deterioro meses antes de la crisis 2024) y programar respaldo |
+| Instituciones (ARCERNNR, Defensoría, Asamblea, CENACE) | Fiscalización independiente contra umbrales declarados; insumo para auditorías del racionamiento 2024 |
+| Academia y educación | Único dataset público citable de series diarias 2022→hoy de la cascada del Paute, con método CRISP-DM |
+
+Hechos verificables que la serie ya documenta: Mazar pasó 66 días bajo su
+nivel crítico (2115 msnm) en 2024, 24 de ellos en noviembre — el mes de los
+apagones; y pasó hasta 31 días consecutivos sobre su máxima declarada en
+2022. Ninguna de las dos cifras es interpretación: son conteos sobre el dato.
+
+### Endpoints públicos para terceros
+
+- **`estado.json`** — estado factual por embalse (banderas, distancias a
+  umbrales, margen de cercanía) actualizado a diario, consumible por
+  cualquier sistema de monitoreo, bot o tablero institucional:
+  `https://jordanvt18.github.io/cotas-embalses-ecuador/estado.json`
+- **Factsheets trimestrales** — una página imprimible por trimestre con los
+  hechos medidos (2022-Q1 en adelante), listas para citar en informes.
+- **CSV versionados en git** — `docs/datos/` publica las tres series
+  (cotas crudas, cotas procesadas, generación CENACE) con historial de
+  commits auditable.
 
 ## La fuente de datos (descubrimiento documentado)
 
@@ -116,7 +151,9 @@ python src/scraper.py diario              # recolecta el mes en curso (lo que us
 python src/scraper.py backfill            # reconstruye la historia (desde 2022-01-01)
 python src/scraper.py backfill --desde 2025-01-01
 python src/visualizacion.py               # regenera las figuras de reports/figures/
-python src/generar_sitio.py               # regenera el sitio de docs/ (GitHub Pages)
+python src/generacion.py                  # recolecta contexto de generación (CENACE)
+python src/factsheet.py                   # regenera los factsheets trimestrales
+python src/generar_sitio.py               # regenera docs/ (sitio + estado.json + datos)
 jupyter lab notebooks/                    # análisis CRISP-DM completo
 ```
 
@@ -183,6 +220,10 @@ marca esas fechas sobre la serie y el notebook 03 produce la tabla
 - El respaldo en web.archive.org es mejor-esfuerzo; cada intento queda en
   `data/raw/archivo_web.log`.
 - El registro de comunicados es manual: cobertura parcial por diseño.
+- Las magnitudes absolutas del tablero de generación de CENACE no cuadran con
+  la demanda conocida del SNI: se publica la composición porcentual (invariante
+  ante la unidad) y los valores brutos quedan registrados tal cual los emite
+  la fuente, pendientes de calibración contra informes oficiales.
 
 La lista completa y sus mitigaciones están en `05_evaluacion_conclusiones.ipynb`.
 

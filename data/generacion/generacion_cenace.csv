@@ -1,0 +1,4 @@
+fecha_consulta,periodo,importacion_tablero,importacion_pct,hidroelectrica_tablero,hidroelectrica_pct,termica_tablero,termica_pct,renovable_tablero,renovable_pct,exportacion_tablero,exportacion_pct,generacion_bruta_tablero,unidad_declarada,paute_tablero,sopladora_tablero,mazar_tablero
+2026-08-16T06:14:03+00:00,dia,0.0,0.0,5053.5,77.31,1459.512,22.33,24.027,0.37,32.711,0.5,6537.039,según tablero CENACE (magnitud por validar contra informes oficiales),977.0,579.0,216.0
+2026-08-16T06:14:03+00:00,mes,487.52,0.44,87364.327,78.42,21060.46,18.9,2496.245,2.24,121.75,0.11,111408.553,según tablero CENACE (magnitud por validar contra informes oficiales),22660.0,11001.0,2827.0
+2026-08-16T06:14:03+00:00,anio,25291.82,1.7,1122911.02,75.5,302427.165,20.33,36683.835,2.47,1462.02,0.1,1487313.84,según tablero CENACE (magnitud por validar contra informes oficiales),219377.0,114685.0,34067.0

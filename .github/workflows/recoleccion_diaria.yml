@@ -54,9 +54,14 @@ jobs:
           ARCHIVE_S3_SECRET: ${{ secrets.ARCHIVE_S3_SECRET }}
         run: python src/scraper.py "$MODO"
 
-      - name: Regenerar figuras y sitio web
+      - name: Recolectar contexto de generación (CENACE)
+        run: python src/generacion.py
+        continue-on-error: true  # mejor esfuerzo: el tablero de CENACE puede cambiar de estructura
+
+      - name: Regenerar figuras, factsheets y sitio web
         run: |
           python src/visualizacion.py
+          python src/factsheet.py
           python src/generar_sitio.py
 
       - name: Commit de datos, figuras y sitio

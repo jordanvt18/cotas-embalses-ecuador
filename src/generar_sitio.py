@@ -21,9 +21,11 @@ from pathlib import Path
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from alertas import evaluar_estado  # noqa: E402
 from constantes import (  # noqa: E402
     ARCHIVO_COTAS_PROCESADAS,
     ARCHIVO_COTAS_RAW,
+    ARCHIVO_GENERACION,
     DIR_FIGURAS,
     EMBALSES,
     RAIZ,
@@ -34,6 +36,7 @@ from constantes import (  # noqa: E402
 DIR_SITIO = RAIZ / "docs"
 DIR_SITIO_FIGURAS = DIR_SITIO / "figuras"
 DIR_SITIO_DATOS = DIR_SITIO / "datos"
+DIR_FACTSHEETS = DIR_SITIO / "factsheets"
 
 
 def _esc(texto: str) -> str:
@@ -83,6 +86,140 @@ def tabla_trimestral(df: pd.DataFrame) -> str:
     </table>"""
 
 
+def banner_estado() -> str:
+    """Chips de estado factual por embalse (alimentan el encabezado del sitio)."""
+    estado = evaluar_estado()
+    clases = {
+        "dentro_de_banda": "chip ok",
+        "cerca_del_minimo": "chip cerca",
+        "cerca_del_maximo": "chip cerca",
+        "bajo_minimo": "chip fuera",
+        "sobre_maximo": "chip fuera",
+        "bajo_critico": "chip fuera",
+        "sin_datos": "chip cerca",
+    }
+    textos = {
+        "dentro_de_banda": "dentro de banda normal",
+        "cerca_del_minimo": "cerca de la cota mínima",
+        "cerca_del_maximo": "cerca de la cota máxima",
+        "bajo_minimo": "bajo la cota mínima",
+        "sobre_maximo": "sobre la cota máxima",
+        "bajo_critico": "bajo el nivel crítico",
+        "sin_datos": "sin datos",
+    }
+    chips = []
+    for embalse in estado["embalses"]:
+        principal = embalse["estados"][0]
+        cota = f"{embalse['cota_msnm']:.2f} msnm" if "cota_msnm" in embalse else "—"
+        chips.append(
+            f'<span class="{clases.get(principal, "chip cerca")}">'
+            f"<strong>{_esc(embalse['embalse'])}</strong> {cota} · {textos.get(principal, principal)}</span>"
+        )
+    return "\n      ".join(chips)
+
+
+def tabla_episodios(df: pd.DataFrame) -> str:
+    """Episodios medidos: rachas ≥3 días bajo mínima, bajo crítica o sobre máxima."""
+    filas = []
+    for embalse, conf in EMBALSES.items():
+        serie = (
+            df[df["embalse"] == embalse]
+            .set_index("fecha")["cota_msnm"]
+            .asfreq("D")
+            .dropna()
+        )
+        if serie.empty:
+            continue
+
+        def clasifica(cota: float) -> str | None:
+            if conf["cota_min"] is not None and cota < conf["cota_min"]:
+                return "bajo la cota mínima"
+            if conf.get("cota_critica") is not None and cota < conf["cota_critica"]:
+                return "bajo el nivel crítico"
+            if conf["cota_max"] is not None and cota > conf["cota_max"]:
+                return "sobre la cota máxima"
+            return None
+
+        clases = serie.map(clasifica)
+        grupo = (clases != clases.shift()).cumsum()
+        for _, indices in clases.groupby(grupo).groups.items():
+            seg = clases.loc[indices]
+            tipo = seg.iloc[0]
+            if tipo is None or len(seg) < 3:
+                continue
+            valores = serie.loc[seg.index]
+            filas.append(
+                "<tr>"
+                f"<th>{_esc(embalse)}</th><td>{_esc(tipo)}</td>"
+                f"<td>{seg.index.min().strftime('%Y-%m-%d')}</td>"
+                f"<td>{seg.index.max().strftime('%Y-%m-%d')}</td>"
+                f"<td>{len(seg)}</td><td>{valores.min():.2f}</td></tr>"
+            )
+    if not filas:
+        return "<p class='actualizado'>Sin episodios medidos de al menos 3 días consecutivos en la serie disponible.</p>"
+    filas.sort(key=lambda f: f.split("<td>")[2])  # ordenar por fecha de inicio
+    return (
+        "<table><thead><tr><th>Embalse</th><th>Condición medida</th><th>Inicio</th>"
+        "<th>Fin</th><th>Días</th><th>Cota mínima del episodio</th></tr></thead>"
+        f"<tbody>{''.join(filas)}</tbody></table>"
+    )
+
+
+def seccion_generacion() -> str:
+    """Composición de generación nacional según el tablero de CENACE (si hay datos)."""
+    if not ARCHIVO_GENERACION.exists():
+        return ""
+    generacion = pd.read_csv(ARCHIVO_GENERACION)
+    fila = generacion[generacion["periodo"] == "dia"].sort_values("fecha_consulta").iloc[-1]
+    porcentajes = [
+        ("Hidroeléctrica", fila["hidroelectrica_pct"]),
+        ("Térmica", fila["termica_pct"]),
+        ("Renovable", fila["renovable_pct"]),
+        ("Importación", fila["importacion_pct"]),
+        ("Exportación", fila["exportacion_pct"]),
+    ]
+    barras = "".join(
+        f"<tr><th>{_esc(nombre)}</th><td>{valor:.2f}%</td></tr>" for nombre, valor in porcentajes
+    )
+    plantas = "".join(
+        f"<tr><th>{_esc(nombre)}</th><td>{fila[f'{clave}_tablero']:.0f}</td></tr>"
+        for nombre, clave in (("Mazar", "mazar"), ("Paute (Molino)", "paute"), ("Sopladora", "sopladora"))
+    )
+    return f"""
+  <section>
+    <h2>Contexto de generación eléctrica nacional (CENACE)</h2>
+    <p>Composición porcentual del día según el <a href="https://www.cenace.gob.ec/info-operativa/InformacionOperativa.htm" target="_blank" rel="noopener">tablero de Información Operativa de CENACE</a>,
+    recolectada diariamente. La caída de la participación hidroeléctrica frente a la térmica es el
+    contexto eléctrico inmediato de unas cotas descendentes.</p>
+    <div class="rejilla">
+      <table><thead><tr><th colspan="2">Composición del día</th></tr></thead><tbody>{barras}</tbody></table>
+      <table><thead><tr><th colspan="2">Cascada del Paute (valor del tablero)</th></tr></thead><tbody>{plantas}</tbody></table>
+    </div>
+    <p class="actualizado">Transparencia: las magnitudes absolutas del tablero de CENACE no cuadran con la
+    demanda conocida del SNI, por lo que se publica la composición porcentual (invariante ante la unidad);
+    los valores brutos quedan en <a href="datos/generacion_cenace.csv">generacion_cenace.csv</a> tal como
+    los publica la fuente, pendientes de calibración contra informes oficiales. Consulta: {fila['fecha_consulta']}.</p>
+  </section>"""
+
+
+def enlaces_factsheets() -> str:
+    paginas = sorted(DIR_FACTSHEETS.glob("*.html")) if DIR_FACTSHEETS.exists() else []
+    if not paginas:
+        return ""
+    ultimo = paginas[-1]
+    anteriores = "".join(
+        f'<li><a href="factsheets/{p.name}">{p.stem}</a></li>' for p in paginas[:-1]
+    )
+    return f"""
+  <section>
+    <h2>Factsheets trimestrales</h2>
+    <p>Hechos medidos por trimestre (cota inicio/fin, mínimos, máximos, días fuera de banda y bajo
+    nivel crítico), listos para imprimir o citar:</p>
+    <p><a class="boton" href="factsheets/{ultimo.name}">➤ Factsheet más reciente: {ultimo.stem}</a></p>
+    <details><summary>Trimestres anteriores ({len(paginas) - 1})</summary><ul>{anteriores}</ul></details>
+  </section>"""
+
+
 def generar() -> Path:
     from datetime import datetime
 
@@ -98,6 +235,11 @@ def generar() -> Path:
 
     df = cargar_datos()
 
+    # estado legible por máquinas (docs/estado.json)
+    from alertas import escribir_estado
+
+    escribir_estado()
+
     # preparar carpetas del artefacto de publicación
     for carpeta in (DIR_SITIO, DIR_SITIO_FIGURAS, DIR_SITIO_DATOS):
         carpeta.mkdir(parents=True, exist_ok=True)
@@ -106,6 +248,8 @@ def generar() -> Path:
     shutil.copy2(ARCHIVO_COTAS_RAW, DIR_SITIO_DATOS / "cotas_historico.csv")
     if ARCHIVO_COTAS_PROCESADAS.exists():
         shutil.copy2(ARCHIVO_COTAS_PROCESADAS, DIR_SITIO_DATOS / "cotas_diarias.csv")
+    if ARCHIVO_GENERACION.exists():
+        shutil.copy2(ARCHIVO_GENERACION, DIR_SITIO_DATOS / "generacion_cenace.csv")
 
     tarjetas = "\n".join(
         tarjeta_embalse(embalse, df[df["embalse"] == embalse].iloc[-1]) for embalse in EMBALSES
@@ -157,6 +301,14 @@ def generar() -> Path:
   a {{ color:var(--acento); }}
   footer {{ text-align:center; color:var(--suave); font-size:.8rem; padding:1.5rem; }}
   .actualizado {{ color:var(--suave); font-size:.85rem; }}
+  .rejilla-chips {{ display:flex; flex-wrap:wrap; gap:.6rem; }}
+  .chip {{ border-radius:1rem; padding:.35rem .8rem; font-size:.85rem; border:1px solid var(--linea); background:#fff; }}
+  .chip.ok {{ background:#e3efe4; color:#1b5e20; border-color:#c3dfc5; }}
+  .chip.cerca {{ background:#fdf3dc; color:#8d6e00; border-color:#f0dfae; }}
+  .chip.fuera {{ background:#fdecea; color:#b71c1c; border-color:#f3c1bd; }}
+  .boton {{ display:inline-block; background:var(--acento); color:#fff; text-decoration:none;
+           padding:.55rem 1rem; border-radius:6px; font-size:.9rem; }}
+  details summary {{ cursor:pointer; color:var(--acento); margin:.4rem 0; }}
 </style>
 </head>
 <body>
@@ -178,6 +330,16 @@ def generar() -> Path:
   </section>
 
   <section>
+    <h2>Estado actual (banderas factuales)</h2>
+    <p class="rejilla-chips">
+      {banner_estado()}
+    </p>
+    <p class="actualizado">Banderas calculadas contra los umbrales declarados (margen de cercanía: 2 m).
+    Versión legible por máquinas: <a href="estado.json">estado.json</a> — consumible por cualquier
+    sistema de monitoreo o bot institucional.</p>
+  </section>
+
+  <section>
     <h2>Lectura más reciente por embalse</h2>
     <div class="rejilla">{tarjetas}
     </div>
@@ -193,6 +355,17 @@ def generar() -> Path:
     {tabla_trimestral(df)}
     <p class="actualizado">Resumen descriptivo por trimestre; no incorpora juicios operativos.</p>
   </section>
+
+  <section>
+    <h2>Episodios medidos fuera de banda o bajo nivel crítico</h2>
+    <p>Rachas de al menos 3 días consecutivos con la cota por debajo de la mínima, por debajo del
+    nivel crítico (Mazar) o por encima de la máxima declaradas. Generada desde el dato; sin
+    redacción interpretativa.</p>
+    {tabla_episodios(df)}
+  </section>
+
+  {seccion_generacion()}
+  {enlaces_factsheets()}
 
   <section>
     <h2>Datos abiertos</h2>

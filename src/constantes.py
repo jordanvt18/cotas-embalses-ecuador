@@ -33,6 +33,14 @@ ARCHIVO_COTAS_PROCESADAS = DIR_PROCESADOS / "cotas_diarias.csv"
 ARCHIVO_COMUNICADOS = DIR_COMUNICADOS / "comunicados.csv"
 ARCHIVO_REGISTRO_ARCHIVO_WEB = DIR_RAW / "archivo_web.log"
 
+# Contexto de generación eléctrica (CENACE)
+DIR_GENERACION = RAIZ / "data" / "generacion"
+ARCHIVO_GENERACION = DIR_GENERACION / "generacion_cenace.csv"
+URL_INFO_OPERATIVA_CENACE = "https://www.cenace.gob.ec/info-operativa/InformacionOperativa.htm"
+
+# Margen (metros) para el estado de "cercanía" a un umbral en el JSON de estado
+MARGEN_CERCANIA_M = 2.0
+
 # ---------------------------------------------------------------------------
 # API oficial CELEC SUR (Oracle ORDS tras el tablero público
 # "Gráficas de Producción" → https://generacioncsr.celec.gob.ec/graficasproduccion/)
