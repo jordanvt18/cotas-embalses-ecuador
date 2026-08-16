@@ -1,7 +1,7 @@
 # Cotas de embalses hidroeléctricos del Ecuador · Monitoreo ciudadano de datos oficiales
 
-[![Recolección diaria](https://github.com/USUARIO/cotas-embalses-ecuador/actions/workflows/recoleccion_diaria.yml/badge.svg)](../../actions)
-[![Sitio publicado](https://img.shields.io/badge/sitio-GitHub%20Pages-1565c0)](https://USUARIO.github.io/cotas-embalses-ecuador/)
+[![Recolección diaria](https://github.com/jordanvt18/cotas-embalses-ecuador/actions/workflows/recoleccion_diaria.yml/badge.svg)](../../actions)
+[![Sitio publicado](https://img.shields.io/badge/sitio-GitHub%20Pages-1565c0)](https://jordanvt18.github.io/cotas-embalses-ecuador/)
 
 Monitoreo **objetivo, reproducible y automatizado** de las cotas (niveles, en
 msnm) de los embalses **Mazar**, **Amaluza** y **Sopladora** — la cascada del
@@ -137,9 +137,8 @@ JavaScript y de contenido autogenerado.
 **Activar GitHub Pages (una sola vez):** en el repositorio, ve a
 *Settings → Pages → Source* y selecciona **GitHub Actions**. El primer
 despliegue puede dispararse manualmente desde la pestaña *Actions* con
-*Run workflow*. Reemplaza `USUARIO` en los badges de este README por el
-usuario u organización real; el sitio quedará en
-`https://USUARIO.github.io/cotas-embalses-ecuador/`.
+*Run workflow*. El sitio queda en
+`https://jordanvt18.github.io/cotas-embalses-ecuador/`.
 
 **Seguridad del pipeline** (detalles en `SECURITY.md`): permisos mínimos por
 trabajo, checkout sin persistencia de credenciales donde no se hace push,
