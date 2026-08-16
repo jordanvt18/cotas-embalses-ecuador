@@ -94,7 +94,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Subir artefacto del sitio
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: docs
 
