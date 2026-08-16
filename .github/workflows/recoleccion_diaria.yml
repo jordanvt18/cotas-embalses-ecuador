@@ -1,0 +1,103 @@
+name: Recolección diaria y publicación
+
+on:
+  schedule:
+    # 12:00 UTC = 07:00 hora Ecuador (UTC-5), tras cerrar el día local
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+    inputs:
+      modo:
+        description: "Modo de recolección"
+        required: false
+        default: "diario"
+        type: choice
+        options:
+          - diario
+          - backfill
+
+# Principio de mínimos privilegios: cada trabajo declara solo los permisos
+# que necesita. La raíz no concede nada.
+permissions: {}
+
+concurrency:
+  group: recoleccion-cotas
+  cancel-in-progress: false
+
+jobs:
+  recolectar:
+    name: Recolectar cotas y regenerar productos
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      # único permiso necesario para hacer commit y push de datos/figuras/sitio
+      contents: write
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Ejecutar scraper
+        env:
+          MODO: ${{ github.event.inputs.modo || 'diario' }}
+          # Opcionales: claves gratuitas de https://archive.org/account/s3.php
+          # para que el respaldo en web.archive.org sea fiable (sin ellas se
+          # intenta anónimo y el resultado queda en data/raw/archivo_web.log).
+          ARCHIVE_S3_ACCESS: ${{ secrets.ARCHIVE_S3_ACCESS }}
+          ARCHIVE_S3_SECRET: ${{ secrets.ARCHIVE_S3_SECRET }}
+        run: python src/scraper.py "$MODO"
+
+      - name: Regenerar figuras y sitio web
+        run: |
+          python src/visualizacion.py
+          python src/generar_sitio.py
+
+      - name: Commit de datos, figuras y sitio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data reports docs
+          if git diff --cached --quiet; then
+            echo "Sin cambios nuevos; el día ya fue recolectado."
+          else
+            git commit -m "Actualizo cotas, figuras y sitio tras la recolección diaria"
+            git push
+          fi
+
+  publicar:
+    name: Publicar sitio en GitHub Pages
+    needs: recolectar
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write      # despliegue del artefacto de Pages
+      id-token: write   # token efímero de OIDC exigido por deploy-pages
+    environment:
+      name: github-pages
+      url: ${{ steps.desplegar.outputs.page_url }}
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+        with:
+          # este trabajo no hace push: no persisto credenciales en el runner
+          persist-credentials: false
+
+      - name: Configurar GitHub Pages
+        id: paginas
+        uses: actions/configure-pages@v5
+
+      - name: Subir artefacto del sitio
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Desplegar en GitHub Pages
+        id: desplegar
+        uses: actions/deploy-pages@v4

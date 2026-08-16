@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cotas de embalses hidroeléctricos del Ecuador · Monitoreo ciudadano</title>
+<style>
+  :root { --tinta:#1a2332; --suave:#5a6b82; --linea:#dde3ec; --fondo:#f7f9fc; --acento:#1565c0; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Georgia,'Times New Roman',serif; color:var(--tinta); background:var(--fondo); line-height:1.6; }
+  header { background:#10233f; color:#fff; padding:2.2rem 1.5rem; }
+  header h1 { margin:0 0 .4rem; font-size:1.6rem; font-weight:600; }
+  header p { margin:.2rem 0; color:#c6d4e6; max-width:60rem; }
+  main { max-width:60rem; margin:0 auto; padding:1.5rem; }
+  section { background:#fff; border:1px solid var(--linea); border-radius:8px; padding:1.4rem; margin:1.4rem 0; }
+  h2 { font-size:1.15rem; border-bottom:1px solid var(--linea); padding-bottom:.4rem; }
+  .principio { border-left:4px solid var(--acento); padding:.6rem 1rem; color:var(--suave); font-style:italic; }
+  .rejilla { display:grid; grid-template-columns:repeat(auto-fit,minmax(16rem,1fr)); gap:1rem; }
+  .tarjeta { border:1px solid var(--linea); border-radius:8px; padding:1rem; }
+  .tarjeta h3 { margin:0 0 .3rem; }
+  .cota { font-size:2rem; margin:.2rem 0; color:var(--acento); font-family:Consolas,monospace; }
+  .unidad { font-size:1rem; color:var(--suave); }
+  .fecha-lectura, .detalle { color:var(--suave); font-size:.85rem; margin:.2rem 0; }
+  .tarjeta-estado { font-size:.85rem; margin:.4rem 0 .2rem; padding:.25rem .6rem; border-radius:1rem; display:inline-block; }
+  .tarjeta-estado.ok { background:#e3efe4; color:#1b5e20; }
+  .tarjeta-estado.fuera { background:#fdecea; color:#b71c1c; }
+  table { border-collapse:collapse; width:100%; font-size:.85rem; }
+  th, td { border:1px solid var(--linea); padding:.35rem .5rem; text-align:center; }
+  thead th { background:#eef2f8; }
+  figure { margin:1.2rem 0; text-align:center; }
+  figure img { max-width:100%; border:1px solid var(--linea); border-radius:6px; }
+  figcaption { color:var(--suave); font-size:.8rem; margin-top:.3rem; }
+  a { color:var(--acento); }
+  footer { text-align:center; color:var(--suave); font-size:.8rem; padding:1.5rem; }
+  .actualizado { color:var(--suave); font-size:.85rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Cotas de embalses hidroeléctricos del Ecuador</h1>
+  <p>Monitoreo ciudadano, objetivo y reproducible de los embalses Mazar, Amaluza y Sopladora
+     (cascada del río Paute, CELEC SUR) frente a sus umbrales operativos de referencia.</p>
+  <p class="actualizado">Última actualización: 2026-08-16 00:29 (hora Ecuador) · 4899 mediciones diarias · serie 2022-01-01 → 2026-08-15</p>
+</header>
+<main>
+  <section>
+    <h2>Principio del proyecto</h2>
+    <p class="principio">Este sitio no afirma que exista desinformación. Superpone en una misma línea de
+    tiempo verificable lo que dicen los sensores oficiales y lo que se comunicó oficialmente;
+    las conclusiones pertenecen al lector.</p>
+    <p>Fuente primaria: la misma API pública que alimenta el <a href="https://generacioncsr.celec.gob.ec/graficasproduccion/" target="_blank" rel="noopener">tablero
+    oficial de Gráficas de Producción de CELEC SUR</a>. Método, umbrales y limitaciones completas en el
+    repositorio (README y notebooks CRISP-DM).</p>
+  </section>
+
+  <section>
+    <h2>Lectura más reciente por embalse</h2>
+    <div class="rejilla">
+      <article class="tarjeta">
+        <h3>Mazar</h3>
+        <p class="cota">2150.65 <span class="unidad">msnm</span></p>
+        <p class="fecha-lectura">lectura del 2026-08-15 (medianoche hora Ecuador)</p>
+        <p class="tarjeta-estado ok">Dentro de la banda normal de operación</p>
+        <p class="detalle">mínima 2098 · máxima 2153 msnm · crítica 2115 msnm (a +35.65 m)</p>
+      </article>
+
+      <article class="tarjeta">
+        <h3>Amaluza</h3>
+        <p class="cota">1985.13 <span class="unidad">msnm</span></p>
+        <p class="fecha-lectura">lectura del 2026-08-15 (medianoche hora Ecuador)</p>
+        <p class="tarjeta-estado ok">Dentro de la banda normal de operación</p>
+        <p class="detalle">mínima 1975 · máxima 1991 msnm</p>
+      </article>
+
+      <article class="tarjeta">
+        <h3>Sopladora</h3>
+        <p class="cota">1315.46 <span class="unidad">msnm</span></p>
+        <p class="fecha-lectura">lectura del 2026-08-15 (medianoche hora Ecuador)</p>
+        <p class="tarjeta-estado ok">Dentro de la banda normal de operación</p>
+        <p class="detalle">mínima 1312 · máxima 1318 msnm</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Series históricas frente a umbrales</h2>
+    
+      <figure>
+        <img src="figuras/comunicados_amaluza.png" alt="comunicados amaluza" loading="lazy">
+        <figcaption>comunicados amaluza</figcaption>
+      </figure>
+
+      <figure>
+        <img src="figuras/comunicados_mazar.png" alt="comunicados mazar" loading="lazy">
+        <figcaption>comunicados mazar</figcaption>
+      </figure>
+
+      <figure>
+        <img src="figuras/comunicados_sopladora.png" alt="comunicados sopladora" loading="lazy">
+        <figcaption>comunicados sopladora</figcaption>
+      </figure>
+
+      <figure>
+        <img src="figuras/distancia_critico_mazar.png" alt="distancia critico mazar" loading="lazy">
+        <figcaption>distancia critico mazar</figcaption>
+      </figure>
+
+      <figure>
+        <img src="figuras/semaforo_amaluza.png" alt="semaforo amaluza" loading="lazy">
+        <figcaption>semaforo amaluza</figcaption>
+      </figure>
+
+      <figure>
+        <img src="figuras/semaforo_mazar.png" alt="semaforo mazar" loading="lazy">
+        <figcaption>semaforo mazar</figcaption>
+      </figure>
+
+      <figure>
+        <img src="figuras/semaforo_sopladora.png" alt="semaforo sopladora" loading="lazy">
+        <figcaption>semaforo sopladora</figcaption>
+      </figure>
+  </section>
+
+  <section>
+    <h2>Contexto trimestral (cota media / mínima / máxima, msnm)</h2>
+    
+    <table>
+      <thead><tr><th>Trimestre</th><th>Mazar<br><small>media / mín / máx</small></th><th>Amaluza<br><small>media / mín / máx</small></th><th>Sopladora<br><small>media / mín / máx</small></th></tr></thead>
+      <tbody><tr><th>2025-Q2</th><td>2153.77 / 2152.50 / 2155.56</td><td>1990.59 / 1987.17 / 1991.21</td><td>1315.46 / 1313.71 / 1316.96</td></tr><tr><th>2025-Q3</th><td>2153.45 / 2152.09 / 2155.33</td><td>1990.43 / 1988.25 / 1991.49</td><td>1315.50 / 1314.14 / 1316.38</td></tr><tr><th>2025-Q4</th><td>2151.19 / 2139.20 / 2154.25</td><td>1988.83 / 1985.91 / 1990.95</td><td>1315.64 / 1313.58 / 1317.00</td></tr><tr><th>2026-Q1</th><td>2148.35 / 2136.77 / 2154.19</td><td>1986.40 / 1982.68 / 1990.89</td><td>1315.85 / 1314.26 / 1317.18</td></tr><tr><th>2026-Q2</th><td>2145.45 / 2131.47 / 2153.83</td><td>1984.30 / 1978.65 / 1990.92</td><td>1315.50 / 1314.05 / 1317.13</td></tr><tr><th>2026-Q3</th><td>2152.54 / 2150.17 / 2154.05</td><td>1987.63 / 1984.31 / 1990.95</td><td>1315.83 / 1313.51 / 1317.12</td></tr></tbody>
+    </table>
+    <p class="actualizado">Resumen descriptivo por trimestre; no incorpora juicios operativos.</p>
+  </section>
+
+  <section>
+    <h2>Datos abiertos</h2>
+    <ul>
+      <li><a href="datos/cotas_historico.csv">cotas_historico.csv</a> — serie cruda auditable
+          (fecha_consulta + mrid por fila)</li>
+      <li><a href="datos/cotas_diarias.csv">cotas_diarias.csv</a> — tabla analítica con indicadores derivados</li>
+    </ul>
+    <p class="actualizado">El registro de comunicados oficiales y su cruce con cotas se mantienen en el repositorio
+    (data/comunicados/ y notebooks 03–04).</p>
+  </section>
+</main>
+<footer>
+  Datos: CELEC SUR (fuente pública oficial) · Código: licencia MIT ·
+  Los datos se presentan; las conclusiones son del lector.
+</footer>
+</body>
+</html>
