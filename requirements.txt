@@ -1,0 +1,5 @@
+# -*- coding: utf-8 -*-
+# Dependencias del proyecto (Python >= 3.10)
+requests>=2.31
+pandas>=2.0
+matplotlib>=3.7

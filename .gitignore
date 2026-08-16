@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Entorno / sistema
+.DS_Store
+Thumbs.db
+
+# Herramientas de análisis temporales
+.cache/
