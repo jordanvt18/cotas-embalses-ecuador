@@ -91,7 +91,7 @@ jobs:
 
       - name: Configurar GitHub Pages
         id: paginas
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Subir artefacto del sitio
         uses: actions/upload-pages-artifact@v3
