@@ -1,4 +1,4 @@
-# Post de LinkedIn · cotas-embalses-ecuador
+# Post de LinkedIn · cotas-embalses-ecuador (versión registro académico)
 
 **Imagen adjunta:** `reports/figures/post_linkedin.png`
 (generada por `src/post_linkedin.py` desde los datos reales)
@@ -7,48 +7,38 @@
 
 ## Texto para publicar (copiar y pegar)
 
-En noviembre de 2024 Ecuador vivió apagones de hasta 14 horas. ¿Cómo estaba realmente el embalse Mazar ese mes?
+En noviembre de 2024, durante la crisis de racionamiento eléctrico del Ecuador, el embalse Mazar permaneció bajo su nivel crítico declarado 24 de los 30 días del mes.
 
-Bajo su nivel crítico 24 de los 30 días.
+Esta afirmación no procede de ninguna fuente periodística: la obtuve contando los registros diarios que mide el SCADA de CELEC SUR. Son datos públicos, aunque de acceso efectivamente restringido, pues el tablero oficial solo exhibe la jornada en curso y no ofrece la serie histórica en formato descargable. Esa asimetría —entre la disponibilidad técnica del dato y su inaccesibilidad práctica— es el problema que decidí abordar.
 
-Esa cifra no es una opinión: es un conteo sobre la cota diaria medida por el SCADA de CELEC SUR — datos públicos que casi nadie puede consultar en serie histórica, porque el tablero oficial solo muestra el día en curso.
+Desarrollé, en consecuencia, un sistema de monitoreo ciudadano que reconstruye la serie diaria de cotas de los embalses Mazar, Amaluza y Sopladora a partir de la misma interfaz pública que alimenta el tablero oficial. El sistema opera de manera automatizada mediante GitHub Actions, acumula cerca de 4.900 mediciones desde enero de 2022 y conserva, para cada registro, la marca temporal de consulta y el identificador del punto de medición, de modo que cualquier persona puede auditar y reproducir la obtención del dato.
 
-Así que lo automatizé:
+Tres hallazgos de la serie merecen señalarse:
 
-📊 Recolecto a diario (GitHub Actions) la cota de Mazar, Amaluza y Sopladora desde la misma API oficial que alimenta el tablero público de CELEC SUR. Serie: 2022 → hoy, ~4.900 mediciones, cada una auditable (fecha de consulta + identificador del punto de medición).
+Primero. Mazar permaneció 66 días bajo su nivel crítico a lo largo de 2024: 16 en abril, 16 en octubre, 24 en noviembre y 10 en diciembre. La severidad del episodio de noviembre es, por tanto, verificable con precisión diaria.
 
-Lo que el dato ya documenta — y cualquiera puede verificar:
+Segundo. La trayectoria de deterioro entre abril y octubre de 2024 era observable en la serie con meses de antelación respecto del racionamiento, lo que sugiere el valor de estas mediciones como insumo de gestión de riesgo, y no solo de constatación retrospectiva.
 
-🔴 Mazar pasó 66 días bajo su nivel crítico en 2024: 24 en noviembre, 16 en octubre, 16 en abril, 10 en diciembre.
-🟢 Hoy los tres embalses están dentro de banda, y Mazar a solo 2,35 m de su máximo (el dato también sirve para el riesgo opuesto: vertimiento).
-📈 El deterioro de abril→octubre de 2024 era visible en la serie meses antes de la crisis.
+Tercero. A la fecha de hoy los tres embalses se encuentran dentro de sus bandas operativas normales, con Mazar a 2,35 metros bajo su cota máxima: el mismo instrumento permite constatar condiciones opuestas, como el riesgo de vertimiento.
 
-Todo está abierto y listo para usar:
+He dispuesto todos los productos en acceso abierto: el sitio con las series y los episodios documentados (jordanvt18.github.io/cotas-embalses-ecuador), un archivo estado.json con banderas factuales por embalse que cualquier sistema institucional puede consumir, factsheets trimestrales imprimibles desde 2022-Q1, y los archivos CSV versionados en git con la metodología CRISP-DM documentada en su integridad.
 
-🌐 Sitio con series, episodios y contexto: jordanvt18.github.io/cotas-embalses-ecuador
-🤖 estado.json — banderas factuales por embalse, consumible por cualquier sistema de monitoreo institucional
-📄 Factsheets trimestrales imprimibles (2022-Q1 → hoy)
-📥 CSV versionado en git, metodología CRISP-DM documentada
+Conviene explicitar el principio metodológico que sostiene el proyecto: no afirmo que haya existido desinformación, ni el trabajo señala a actor alguno. Me limito a superponer, en una misma línea de tiempo verificable, lo que registran los sensores oficiales y lo que se comunicó oficialmente. Sostengo que la confianza en los datos públicos se construye con método declarado, fuentes citadas y ausencia deliberada de editorial.
 
-Una regla de diseño que me importa: el proyecto no afirma que hubo desinformación ni apunta a nadie. Superpone lo que dicen los sensores oficiales y lo que se comunicó oficialmente — las conclusiones son del lector. Creo que así se construye confianza en los datos públicos: con método, fuentes citadas y cero editorial.
+A quienes trabajan en energía, regulación, verificación de datos o investigación: el instrumento está disponible. Agradezco, desde ya, las observaciones metodológicas que la comunidad pueda formular.
 
-Si trabajas en energía, regulación, prensa de datos o simplemente quieres verificar una declaración oficial sobre los embalses: los datos están ahí.
+¿Qué otra variable de interés público consideran que ameritaría un monitoreo de estas características?
 
-¿Qué otra variable pública monitorearías así?
-
-#DataScience #Energía #Ecuador #Transparencia #OpenData #Python #GitHub
+#CienciaDeDatos #Energía #Ecuador #Transparencia #DatosAbiertos
 
 ---
 
 ## Notas de publicación
 
-- **Horario sugerido:** martes a jueves, 07:30–08:30 (Ecuador) — ventana de mayor actividad profesional.
-- **Primer comentario (tuyo):** añade el enlace al repositorio
+- **Horario sugerido:** martes a jueves, 07:30–08:30 (Ecuador).
+- **Primer comentario (tuyo):** enlace al repositorio
   https://github.com/jordanvt18/cotas-embalses-ecuador
-  (LinkedIn da menos alcance a enlaces en el cuerpo del post; el del texto
-  principal es la GitHub Pages, que no penaliza igual al ser contexto).
-- **Engagement:** responde los comentarios con el factsheet del trimestre
-  correspondiente cuando pregunten por datos concretos
-  (p. ej. factsheets/2024-Q4.html para lo de noviembre).
+- **Tono:** mantener la respuesta a comentarios en el mismo registro: sobrio,
+  con remisión a las fuentes (factsheets, CSV) ante cualquier observación.
 - Los números citados son verificables: 66 días bajo crítico (16+24+16+10 en
   2024), 2,35 m bajo el máximo al 15-ago-2026, ~4.900 mediciones.
