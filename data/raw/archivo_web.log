@@ -30,3 +30,7 @@
 2026-08-20T13:01:46.645753+00:00	HTTP_401	https://generacioncsr.celec.gob.ec:8443/ords/csr/sardomcsr/pointValuesMesH24?mrid=30031&fechaInicio=2026-08-01T00:00:00.000Z&fechaFin=2026-08-02T00:00:00.000Z	
 2026-08-20T13:01:48.726907+00:00	HTTP_401	https://generacioncsr.celec.gob.ec:8443/ords/csr/sardomcsr/pointValuesMesH24?mrid=24019&fechaInicio=2026-08-01T00:00:00.000Z&fechaFin=2026-08-02T00:00:00.000Z	
 2026-08-20T13:01:50.803133+00:00	HTTP_401	https://generacioncsr.celec.gob.ec:8443/ords/csr/sardomcsr/pointValuesMesH24?mrid=90919&fechaInicio=2026-08-01T00:00:00.000Z&fechaFin=2026-08-02T00:00:00.000Z	
+2026-08-21T13:00:55.580024+00:00	HTTP_401	https://generacioncsr.celec.gob.ec/graficasproduccion/	
+2026-08-21T13:00:55.785870+00:00	HTTP_401	https://generacioncsr.celec.gob.ec:8443/ords/csr/sardomcsr/pointValuesMesH24?mrid=30031&fechaInicio=2026-08-01T00:00:00.000Z&fechaFin=2026-08-02T00:00:00.000Z	
+2026-08-21T13:00:57.845275+00:00	HTTP_401	https://generacioncsr.celec.gob.ec:8443/ords/csr/sardomcsr/pointValuesMesH24?mrid=24019&fechaInicio=2026-08-01T00:00:00.000Z&fechaFin=2026-08-02T00:00:00.000Z	
+2026-08-21T13:00:59.903492+00:00	HTTP_401	https://generacioncsr.celec.gob.ec:8443/ords/csr/sardomcsr/pointValuesMesH24?mrid=90919&fechaInicio=2026-08-01T00:00:00.000Z&fechaFin=2026-08-02T00:00:00.000Z	
