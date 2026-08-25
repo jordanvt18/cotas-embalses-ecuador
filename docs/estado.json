@@ -1,14 +1,14 @@
 {
   "proyecto": "cotas-embalses-ecuador",
   "principio": "Banderas factuales contra umbrales declarados; sin valoraciones.",
-  "generado_en": "2026-08-24T08:03:46-05:00",
+  "generado_en": "2026-08-25T07:59:43-05:00",
   "zona_horaria": "America/Guayaquil",
   "margen_cercania_m": 2.0,
   "embalses": [
     {
       "embalse": "Mazar",
-      "fecha_lectura": "2026-08-23",
-      "cota_msnm": 2148.29,
+      "fecha_lectura": "2026-08-24",
+      "cota_msnm": 2147.84,
       "estados": [
         "dentro_de_banda"
       ],
@@ -18,17 +18,17 @@
         "cota_max": 2153.0
       },
       "distancias_m": {
-        "a_minimo": 50.29,
-        "a_maximo": 4.71,
-        "a_critico": 33.29
+        "a_minimo": 49.84,
+        "a_maximo": 5.16,
+        "a_critico": 32.84
       },
       "mrid": 30031,
       "fuente": "https://generacioncsr.celec.gob.ec/graficasproduccion/"
     },
     {
       "embalse": "Amaluza",
-      "fecha_lectura": "2026-08-23",
-      "cota_msnm": 1984.32,
+      "fecha_lectura": "2026-08-24",
+      "cota_msnm": 1985.11,
       "estados": [
         "dentro_de_banda"
       ],
@@ -37,26 +37,26 @@
         "cota_max": 1991.0
       },
       "distancias_m": {
-        "a_minimo": 9.32,
-        "a_maximo": 6.68
+        "a_minimo": 10.11,
+        "a_maximo": 5.89
       },
       "mrid": 24019,
       "fuente": "https://generacioncsr.celec.gob.ec/graficasproduccion/"
     },
     {
       "embalse": "Sopladora",
-      "fecha_lectura": "2026-08-23",
-      "cota_msnm": 1316.24,
+      "fecha_lectura": "2026-08-24",
+      "cota_msnm": 1315.76,
       "estados": [
-        "cerca_del_maximo"
+        "dentro_de_banda"
       ],
       "umbrales_msnm": {
         "cota_min": 1312.0,
         "cota_max": 1318.0
       },
       "distancias_m": {
-        "a_minimo": 4.24,
-        "a_maximo": 1.76
+        "a_minimo": 3.76,
+        "a_maximo": 2.24
       },
       "mrid": 90919,
       "fuente": "https://generacioncsr.celec.gob.ec/graficasproduccion/"
