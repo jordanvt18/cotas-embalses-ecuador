@@ -33,7 +33,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout del repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Instalar Python
         uses: actions/setup-python@v5
@@ -89,7 +89,7 @@ jobs:
       url: ${{ steps.desplegar.outputs.page_url }}
     steps:
       - name: Checkout del repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # este trabajo no hace push: no persisto credenciales en el runner
           persist-credentials: false
